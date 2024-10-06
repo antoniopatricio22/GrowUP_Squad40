@@ -18,11 +18,6 @@ necessário editados por usuários ‘Gestores’ . O sistema visa otimizar o ar
 dados, e diminuir o risco de erros humanos durante o processo.
 
 
-## Stack de Desenvolvimento
-
-- JAVA SE (JDK 21) 
-- Framework Spring Boot (3.3.4)
-- SQLite (3.46.1)
 
 
 
