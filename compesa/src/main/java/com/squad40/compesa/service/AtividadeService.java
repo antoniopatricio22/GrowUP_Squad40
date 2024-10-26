@@ -24,8 +24,8 @@ public class AtividadeService {
 
     public Atividade update(Long id, Atividade newAtividade) {
         Atividade atividade = atividadeRepository.findById(id).orElseThrow();
-        atividade.setDescricao(newAtividade.getDescricao()); //Depende de Implementar o método em Atividade
-        atividade.setStatus(newAtividade.getStatus()); //Depende de Implementar o método em Atividade
+        //atividade.setDescricao(newAtividade.getDescricao()); //Depende de Implementar o método em Atividade
+        //atividade.setStatus(newAtividade.getStatus()); //Depende de Implementar o método em Atividade
         return atividadeRepository.save(atividade);
     }
 

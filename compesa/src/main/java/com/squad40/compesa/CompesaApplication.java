@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CompesaApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(CompesaApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(CompesaApplication.class, args);
+    }
 }
