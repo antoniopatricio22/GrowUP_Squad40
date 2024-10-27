@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "role")
+@DiscriminatorColumn(name = "userRole")
 public abstract class Usuario {
     
     @Id

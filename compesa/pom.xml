@@ -51,14 +51,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Hibernate Core -->
-        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
-		<dependency>
-    		<groupId>org.hibernate.orm</groupId>
-    		<artifactId>hibernate-core</artifactId>
-    		<version>6.6.1.Final</version>
-		</dependency>
-
         <!-- SQLite JDBC Driver -->
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
         <dependency>
