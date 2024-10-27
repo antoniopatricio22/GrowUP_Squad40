@@ -22,6 +22,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .csrf(csrf -> csrf.disable()) // Desativa o CSRF de forma segura
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/home").authenticated()  // Apenas usuários autenticados podem acessar "/home"
+            .requestMatchers("/atividades").denyAll()
             .anyRequest().permitAll()  // Permite acesso a todas as outras requisições
         )
         .formLogin(form -> form
