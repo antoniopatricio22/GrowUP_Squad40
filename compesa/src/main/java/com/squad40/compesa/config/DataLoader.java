@@ -44,6 +44,5 @@ private void loadUsers() {
     controlador.setPassword(passwordService.encodePassword("controlador123")); // Criptografando a senha
     controlador.setRole(Role.CONTROLADOR);
     usuarioRepository.save(controlador);
-
 }
 }
