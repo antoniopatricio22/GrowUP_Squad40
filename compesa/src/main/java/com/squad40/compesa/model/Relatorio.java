@@ -22,10 +22,6 @@ public class Relatorio {
     public void generatePDF() {
         // TODO Gerar PDF
     }
-    /* 
-    public void generateCSV() {
-        
-    }*/
 
     public void exportRelatorio() {
         // TODO Exportar relatorio

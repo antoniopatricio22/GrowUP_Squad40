@@ -16,9 +16,6 @@ public class Atividade {
     private TipoAtividade tipo;
 
     @Enumerated(EnumType.STRING)
-    private Priority prioridade;
-
-    @Enumerated(EnumType.STRING)
     private Status status;
 
     private LocalDateTime createdAt;
