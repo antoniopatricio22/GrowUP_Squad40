@@ -1,13 +1,9 @@
 package com.squad40.compesa.service;
 
-import com.squad40.compesa.model.Administrador;
-import com.squad40.compesa.model.Controlador;
-import com.squad40.compesa.model.Role;
 import com.squad40.compesa.model.Usuario;
 import com.squad40.compesa.repository.UsuarioRepository;
 
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class UsuarioService implements UserDetailsService, CommandLineRunner {
+public class UsuarioService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -44,7 +40,7 @@ public class UsuarioService implements UserDetailsService, CommandLineRunner {
 
     
     public Usuario save(Usuario usuario) {
-        usuario.setPassword(encryptPassword(usuario.getPassword())); // Encrypt password when saving a new user???
+        usuario.setPassword(encryptPassword(usuario.getPassword())); 
         return usuarioRepository.save(usuario);
     }
 
@@ -58,40 +54,25 @@ public class UsuarioService implements UserDetailsService, CommandLineRunner {
         return passwordEncoder.matches(rawPassword, encryptedPassword);
     }
 
-    // Adiciona o método run para executar no início da aplicação
-    @Override
-    public void run(String... args) throws Exception {
-        if (usuarioRepository.findByUsername("admin") == null) {
-            Usuario admin = new Administrador();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole(Role.ADMINISTRADOR);
-            usuarioRepository.save(admin);
-        }
-
-        if (usuarioRepository.findByUsername("controlador") == null) {
-            Usuario controlador = new Controlador();
-            controlador.setUsername("controlador");
-            controlador.setPassword(passwordEncoder.encode("controlador123"));
-            controlador.setRole(Role.CONTROLADOR);
-            usuarioRepository.save(controlador);
-        }
-        
-    }
-
-    //----------------------------------------------------------//
-
     public Usuario createUsuario(Usuario usuario) {
-        usuario.setPassword(encryptPassword(usuario.getPassword()));
+        if (usuario.getPassword() != null) {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
         return usuarioRepository.save(usuario);
     }
 
     public Usuario updateUsuario(Long id, Usuario updatedUsuario) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
         usuario.setUsername(updatedUsuario.getUsername());
-        usuario.setPassword(encryptPassword(updatedUsuario.getPassword()));
+        
+        if (updatedUsuario.getPassword() != null) {
+            usuario.setPassword(passwordEncoder.encode(updatedUsuario.getPassword()));
+        }
+        
         usuario.setRole(updatedUsuario.getRole());
         usuario.setUpdatedAt(LocalDateTime.now());
+        
         return usuarioRepository.save(usuario);
     }
 

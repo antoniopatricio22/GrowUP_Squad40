@@ -29,7 +29,7 @@ public class SecurityConfig {
         this.usuarioService = usuarioService;
     }
 
-    @SuppressWarnings("removal")
+    @SuppressWarnings("removal") // método depreciado.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -39,9 +39,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/admin/usuarios/**").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
             )
-            .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
+            .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> { //metodos depreciados
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                response.getWriter().write("Acesso negado.2"); // Mensagem customizada
+                response.getWriter().write("Acesso negado.2"); // Mensagem customizada não funcional?
             })
             .and()
             .addFilterBefore(new JwtAuthorizationFilter(jwtTokenService, usuarioService), UsernamePasswordAuthenticationFilter.class);
