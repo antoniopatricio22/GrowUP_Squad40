@@ -247,7 +247,7 @@ json
 5. **Get All Users**
 Endpoint: /admin/usuarios
 <br>Method: GET
-<br>Description: Retrieves a list of all users.
+<br>Description: Retorna uma Lista com os usuários cadastrados.
 
 Request Headers:
 
