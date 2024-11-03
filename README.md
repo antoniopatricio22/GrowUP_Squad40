@@ -55,8 +55,8 @@ json
 ## Autenticação
 1. **Login**
 Endpoint: /auth/login
-Method: POST
-Description: Autentica um usuário e retorna um JWT token temporário.
+<br>Method: POST
+<br>Description: Autentica um usuário e retorna um JWT token temporário.
 
 Request Body:
 
@@ -64,7 +64,7 @@ json
 ```bash
 {
   "username": "admin",
-  "password": "passwordAdmin"
+  "password": "admin123"
 }
 ```
 Response:
@@ -84,6 +84,7 @@ json
 ```
 
 - Error:
+
 json
 ```bash
 {
@@ -100,8 +101,8 @@ json
 ## Gerenciamento de contas (Admin Endpoints)
 2. **Create User**
 Endpoint: /admin/usuarios
-Method: POST
-Description: Cria uma nova conta de usuário. Somente Acessivel para ADMINISTRADOR.
+<br>Method: POST
+<br>Description: Cria uma nova conta de usuário. Somente Acessivel para ADMINISTRADOR.
 
 Request Headers:
 
@@ -137,6 +138,7 @@ json
 ```
 
 - Error:
+
 json
 ```bash
 {
@@ -152,8 +154,8 @@ json
 
 3. **Update User**
 Endpoint: /admin/usuarios/{id}
-Method: PUT
-Description: Atualiza os valores de um usuário, identificado pelo ID.
+<br>Method: PUT
+<br>Description: Atualiza os valores de um usuário, identificado pelo ID.
 
 Request Headers:
 
@@ -206,8 +208,8 @@ json
 
 4. **Delete User**
 Endpoint: /admin/usuarios/{id}
-Method: DELETE
-Description: Remove uma conta de usuário.
+<br>Method: DELETE
+<br>Description: Remove uma conta de usuário.
 
 Request Headers:
 
@@ -244,8 +246,8 @@ json
 
 5. **Get All Users**
 Endpoint: /admin/usuarios
-Method: GET
-Description: Retrieves a list of all users.
+<br>Method: GET
+<br>Description: Retrieves a list of all users.
 
 Request Headers:
 
@@ -278,8 +280,8 @@ json
 
 6. **Get User by ID**
 Endpoint: /admin/usuarios/{id}
-Method: GET
-Description: Busca um usuário especifico pelo ID.
+<br>Method: GET
+<br>Description: Busca um usuário especifico pelo ID.
 
 Request Headers:
 
@@ -288,6 +290,7 @@ Authorization: Bearer <jwt_token_here>
 Response:
 
 - Success:
+
 json
 ```bash
 {
