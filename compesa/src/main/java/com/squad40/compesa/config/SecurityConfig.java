@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+//import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,23 +29,27 @@ public class SecurityConfig {
         this.usuarioService = usuarioService;
     }
 
-    @SuppressWarnings("removal") // método depreciado.
+    // @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/admin/usuarios/**").hasRole("ADMINISTRADOR")
-                .anyRequest().authenticated()
-            )
-            .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> { //metodos depreciados
-                response.setStatus(HttpStatus.FORBIDDEN.value());
-                response.getWriter().write("Acesso negado.2"); // Mensagem customizada não funcional?
-            })
-            .and()
-            .addFilterBefore(new JwtAuthorizationFilter(jwtTokenService, usuarioService), UsernamePasswordAuthenticationFilter.class);
-        
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/admin/usuarios/**").hasRole("ADMINISTRADOR")
+                        .anyRequest().authenticated())/*
+                                                       * .exceptionHandling(exceptionHandling -> exceptionHandling
+                                                       * .accessDeniedHandler((request, response, accessDeniedException)
+                                                       * -> {
+                                                       * response.setStatus(HttpStatus.FORBIDDEN.value());
+                                                       * response.getWriter().write("Acesso negado.2"); // Customizada??
+                                                       * Vale a Pena remover
+                                                       * })
+                                                       * )
+                                                       */
+                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenService, usuarioService),
+                        UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
@@ -53,10 +57,10 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-        
+
 }

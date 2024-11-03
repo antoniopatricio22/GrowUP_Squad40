@@ -3,7 +3,6 @@ package com.squad40.compesa.service;
 import com.squad40.compesa.model.Usuario;
 import com.squad40.compesa.repository.UsuarioRepository;
 
-
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,9 +37,8 @@ public class UsuarioService implements UserDetailsService {
                 .build();
     }
 
-    
     public Usuario save(Usuario usuario) {
-        usuario.setPassword(encryptPassword(usuario.getPassword())); 
+        usuario.setPassword(encryptPassword(usuario.getPassword())); // Encrypt password when saving a new user???
         return usuarioRepository.save(usuario);
     }
 
@@ -54,6 +52,32 @@ public class UsuarioService implements UserDetailsService {
         return passwordEncoder.matches(rawPassword, encryptedPassword);
     }
 
+    /*
+     * // Adiciona o método run para executar no início da aplicação
+     * 
+     * @Override
+     * public void run(String... args) throws Exception {
+     * if (usuarioRepository.findByUsername("admin") == null) {
+     * Usuario admin = new Administrador();
+     * admin.setUsername("admin");
+     * admin.setPassword(passwordEncoder.encode("admin123"));
+     * admin.setRole(Role.ADMINISTRADOR);
+     * usuarioRepository.save(admin);
+     * }
+     * 
+     * if (usuarioRepository.findByUsername("controlador") == null) {
+     * Usuario controlador = new Controlador();
+     * controlador.setUsername("controlador");
+     * controlador.setPassword(passwordEncoder.encode("controlador123"));
+     * controlador.setRole(Role.CONTROLADOR);
+     * usuarioRepository.save(controlador);
+     * }
+     * 
+     * }
+     * 
+     * //----------------------------------------------------------
+     */
+
     public Usuario createUsuario(Usuario usuario) {
         if (usuario.getPassword() != null) {
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -62,17 +86,18 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public Usuario updateUsuario(Long id, Usuario updatedUsuario) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
         usuario.setUsername(updatedUsuario.getUsername());
-        
+
         if (updatedUsuario.getPassword() != null) {
             usuario.setPassword(passwordEncoder.encode(updatedUsuario.getPassword()));
         }
-        
+
         usuario.setRole(updatedUsuario.getRole());
         usuario.setUpdatedAt(LocalDateTime.now());
-        
+
         return usuarioRepository.save(usuario);
     }
 

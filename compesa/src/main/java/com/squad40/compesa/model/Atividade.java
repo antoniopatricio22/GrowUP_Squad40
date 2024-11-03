@@ -29,6 +29,6 @@ public class Atividade {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // TODO CRUD Metodos: create, read, update, delete. Criar nos services e chamar nos controllers.
+    // TODO CRUD Metodos: create, read, update, delete
 }
 

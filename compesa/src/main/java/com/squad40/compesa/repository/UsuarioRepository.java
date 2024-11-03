@@ -6,4 +6,3 @@ import com.squad40.compesa.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByUsername(String username);
 }
-

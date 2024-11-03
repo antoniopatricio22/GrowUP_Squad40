@@ -1,6 +1,5 @@
 package com.squad40.compesa.controller;
 
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,8 @@ import com.squad40.compesa.model.Usuario;
 import com.squad40.compesa.service.JwtTokenService;
 import com.squad40.compesa.service.UsuarioService;
 
-// UsuarioAdminController.java
+import com.squad40.compesa.model.StandardResponse;
+
 
 @RestController
 @RequestMapping("/admin")
@@ -36,97 +36,103 @@ public class UsuarioAdminController {
     private JwtTokenService jwtTokenService;
 
     @PostMapping("/usuarios")
-    public ResponseEntity<?> createUsuario(@RequestHeader("Authorization") String token,
-                                           @RequestBody Map<String, Object> usuarioData) {
+    public ResponseEntity<StandardResponse<?>> createUsuario(@RequestHeader("Authorization") String token,
+            @RequestBody Map<String, Object> usuarioData) {
         if (!isAdmin(token)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StandardResponse.error("Acesso negado", "Usuário não tem permissão para criar contas"));
         }
 
         String username = (String) usuarioData.get("username");
         String password = (String) usuarioData.get("password");
         Role role = Role.valueOf((String) usuarioData.get("role"));
 
-        Usuario usuario;
-        if (role == Role.ADMINISTRADOR) {
-            usuario = new Administrador();
-        } else {
-            usuario = new Controlador();
-        }
-
+        Usuario usuario = role == Role.ADMINISTRADOR ? new Administrador() : new Controlador();
         usuario.setUsername(username);
         usuario.setPassword(password);
         usuario.setRole(role);
 
         Usuario novoUsuario = usuarioService.createUsuario(usuario);
-        return ResponseEntity.ok(novoUsuario);
+        return ResponseEntity.ok(StandardResponse.success("Usuário Criado com Sucesso", novoUsuario));
     }
 
     @PutMapping("/usuarios/{id}")
-    public ResponseEntity<?> updateUsuario(@RequestHeader("Authorization") String token,
-                                       @PathVariable("id") Long id, @RequestBody Map<String, Object> usuarioData) {
-    if (!isAdmin(token)) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
-    }
-    
-    // Extrair dados do usuário a partir do Map
-    String username = (String) usuarioData.get("username");
-    String password = (String) usuarioData.get("password");
-    String roleString = (String) usuarioData.get("role");
-    Role role = Role.valueOf(roleString);
+    public ResponseEntity<StandardResponse<?>> updateUsuario(@RequestHeader("Authorization") String token,
+            @PathVariable("id") Long id, @RequestBody Map<String, Object> usuarioData) {
+        if (!isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StandardResponse.error("Acesso negado.", "Usuário não tem permissão para criar contas"));
+        }
 
-    // Verifica o tipo de usuário e cria uma instância da subclasse apropriada da pra usa instanceof???
-    Usuario usuario;
-    if (role == Role.ADMINISTRADOR) {
-        usuario = new Administrador();
-    } else {
-        usuario = new Controlador();
-    }
+        String username = (String) usuarioData.get("username");
+        String password = (String) usuarioData.get("password");
+        Role role = Role.valueOf((String) usuarioData.get("role"));
 
-    // Configura os dados do usuário atualizado
-    usuario.setUsername(username);
-    usuario.setPassword(password);
-    usuario.setRole(role);
+        try {
+            Usuario updatedUsuario = role == Role.ADMINISTRADOR ? new Administrador() : new Controlador();
+            updatedUsuario.setUsername(username);
+            updatedUsuario.setPassword(password);
+            updatedUsuario.setRole(role);
 
-    // Atualiza o usuário usando o serviço
-    Usuario usuarioAtualizado = usuarioService.updateUsuario(id, usuario);
-    return ResponseEntity.ok(usuarioAtualizado);
+            Usuario usuarioAtualizado = usuarioService.updateUsuario(id, updatedUsuario);
+            return ResponseEntity.ok(StandardResponse.success("Usuário Atualizado com Sucesso", usuarioAtualizado));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(StandardResponse.error("Usuário não encontrado", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/usuarios/{id}")
-    public ResponseEntity<?> deleteUsuario(@RequestHeader("Authorization") String token, @PathVariable("id") Long id) {
+    public ResponseEntity<StandardResponse<?>> deleteUsuario(@RequestHeader("Authorization") String token,
+            @PathVariable("id") Long id) {
         if (!isAdmin(token)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StandardResponse.error("Acesso negado.", "Usuário não tem permissão para criar contas"));
         }
+
+        if (usuarioService.buscarUsuarioPorId(id) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(StandardResponse.error("Usuário não encontrado", "Não Existe Usuário com Esse ID"));
+        }
+
         usuarioService.deleteUsuario(id);
-        return ResponseEntity.ok("Usuário removido com sucesso.");
+        return ResponseEntity.ok(StandardResponse.success("Usuário Removido com Sucesso", null));
+
     }
 
-    // Método para listar todos os usuários
+    @GetMapping("/usuarios/{id}") // Método ainda a ser utilizado em conjunto com emissão de Relatórios.
+    public ResponseEntity<StandardResponse<?>> buscarUsuarioPorId(@RequestHeader("Authorization") String token,
+            @PathVariable("id") Long id) {
+        if (!isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StandardResponse.error("Acesso negado.", "Usuário não tem permissão para criar contas"));
+        }
+
+        Usuario usuario = usuarioService.buscarUsuarioPorId(id);
+        if (usuario != null) {
+            return ResponseEntity.ok(StandardResponse.success("Usuário Recuperado com Sucesso", usuario));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(StandardResponse.error("Usuário não encontrado", "Não Existe Usuário com Esse ID"));
+        }
+    }
+
     @GetMapping("/usuarios")
-    public ResponseEntity<?> listarUsuarios(@RequestHeader("Authorization") String token) {
-    if (!isAdmin(token)) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
+    public ResponseEntity<StandardResponse<?>> listarUsuarios(@RequestHeader("Authorization") String token) {
+        if (!isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StandardResponse.error("Acesso negado.", "Usuário não tem permissão para criar contas"));
+        }
+
+        return ResponseEntity
+                .ok(StandardResponse.success("Lista de Usuários Recuperada com Sucesso",
+                        usuarioService.listarTodosUsuarios()));
     }
-    return ResponseEntity.ok(usuarioService.listarTodosUsuarios());
-}
 
-    // Método para buscar um usuário específico pelo ID
-    @GetMapping("/usuarios/{id}")
-    public ResponseEntity<?> buscarUsuarioPorId(@RequestHeader("Authorization") String token, @PathVariable("id") Long id) {
-    if (!isAdmin(token)) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.1");
-    }
-    Usuario usuario = usuarioService.buscarUsuarioPorId(id);
-    return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
-}
-
-
-    // Método auxiliar para verificar se o usuário autenticado é um ADMINISTRADOR
+    // Método auxiliar, será que vale a pena mover para UserService?
     private boolean isAdmin(String token) {
-        String jwt = token.substring(7); // Remove o prefixo "Bearer "
-        String username = jwtTokenService.getUsernameFromToken(jwt);
+        String jwt = token.substring(7);
         String role = jwtTokenService.getRoleFromToken(jwt);
-        return username != null && "ROLE_ADMINISTRADOR".equals(role);
+        return "ROLE_ADMINISTRADOR".equals(role);
     }
-
 }
