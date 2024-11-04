@@ -52,32 +52,6 @@ public class UsuarioService implements UserDetailsService {
         return passwordEncoder.matches(rawPassword, encryptedPassword);
     }
 
-    /*
-     * // Adiciona o método run para executar no início da aplicação
-     * 
-     * @Override
-     * public void run(String... args) throws Exception {
-     * if (usuarioRepository.findByUsername("admin") == null) {
-     * Usuario admin = new Administrador();
-     * admin.setUsername("admin");
-     * admin.setPassword(passwordEncoder.encode("admin123"));
-     * admin.setRole(Role.ADMINISTRADOR);
-     * usuarioRepository.save(admin);
-     * }
-     * 
-     * if (usuarioRepository.findByUsername("controlador") == null) {
-     * Usuario controlador = new Controlador();
-     * controlador.setUsername("controlador");
-     * controlador.setPassword(passwordEncoder.encode("controlador123"));
-     * controlador.setRole(Role.CONTROLADOR);
-     * usuarioRepository.save(controlador);
-     * }
-     * 
-     * }
-     * 
-     * //----------------------------------------------------------
-     */
-
     public Usuario createUsuario(Usuario usuario) {
         if (usuario.getPassword() != null) {
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -119,4 +93,5 @@ public class UsuarioService implements UserDetailsService {
     public Usuario buscarUsuarioPorId(Long id) {
         return usuarioRepository.findById(id).orElse(null);
     }
+
 }

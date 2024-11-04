@@ -3,9 +3,10 @@ package com.squad40.compesa.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "role")
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "userRole")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Usuario {
 
     @Id
