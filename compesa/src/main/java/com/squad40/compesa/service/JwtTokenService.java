@@ -16,12 +16,16 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
-public class JwtTokenService {private final SecretKey key;
+public class JwtTokenService {
+    
+    private final SecretKey key;
+    private final long expirationMillis;
 
-    public JwtTokenService(@Value("${jwt.secret}") String jwtSecret) {
+    public JwtTokenService(@Value("${jwt.secret}") String jwtSecret,
+                           @Value("${jwt.expiration}") long expirationMillis) {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        //this.key = Jwts.SIG.HS256.key().build();
+        this.expirationMillis = expirationMillis;
     }
 
     public String generateToken(Authentication authentication) {
@@ -31,7 +35,7 @@ public class JwtTokenService {private final SecretKey key;
                             .subject(userDetails.getUsername())
                             .claim("role", role) // Adiciona a role ao token 
                             .issuedAt(new Date()) 
-                            .expiration(new Date(System.currentTimeMillis() + 86400000)) // 1 dia de expiração 
+                            .expiration(new Date(System.currentTimeMillis() + expirationMillis))  
                             .signWith(key) 
                             .compact();
     }
