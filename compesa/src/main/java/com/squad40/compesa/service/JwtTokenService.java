@@ -1,11 +1,13 @@
 package com.squad40.compesa.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,21 @@ public class JwtTokenService {
     private final SecretKey key;
     private final long expirationMillis;
 
+    @Autowired
+    public JwtTokenService(Dotenv dotenv) {
+        byte[] keyBytes = Decoders.BASE64.decode(dotenv.get("JWT_SECRET"));
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.expirationMillis = Long.parseLong(dotenv.get("JWT_EXPIRATION"));
+    }
+    /* 
     public JwtTokenService(@Value("${jwt.secret}") String jwtSecret,
                            @Value("${jwt.expiration}") long expirationMillis) {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.expirationMillis = expirationMillis;
     }
+    */
+
 
     public String generateToken(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal(); // Adicionando a role ao token 

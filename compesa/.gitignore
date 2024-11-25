@@ -9,6 +9,9 @@ target/
 /pom.xml.next
 /release.properties
 
+# Environment variables
+.env
+
 # Compiled class files
 *.class
 
