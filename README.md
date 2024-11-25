@@ -76,7 +76,7 @@ cd compesa
 Modifique o arquivo .env na raiz do projeto e defina os valores necessários:
 
 ```bash
-JWT_SECRET=seu_segredo_aqui
+JWT_SECRET=seu_segredo_aqui #Chave para encriptação
 JWT_EXPIRATION=86400000 # Tempo de expiração do token em milissegundos
 ```
 
@@ -85,7 +85,8 @@ SQLite (Padrão)
 O banco SQLite será criado automaticamente no diretório database/ ao iniciar a aplicação.
 
 MySQL (Opcional) modifique como no exemplo abaixo.
-1 Atualize o arquivo application.properties para usar MySQL:
+
+1 Atualize o arquivo application.properties para usar MySQL como no exemplo:
 ```bash
 spring.datasource.url=jdbc:mysql://localhost:3306/compesa
 spring.datasource.username=seu_usuario
@@ -126,7 +127,7 @@ Mais detalhes podem ser encontrados na Documentação para o Gerenciamento de Us
 
 
 
-## Deploy em Produção
+## Deploy
 ### Opção 1: Servidor Local (Tomcat, Nginx, etc.)
 1. Gere o arquivo .jar do projeto:
 ```bash
@@ -170,7 +171,7 @@ Render é uma plataforma de nuvem simples para hospedar aplicações. Siga os pa
 
 5. Implantação:
     - Após salvar as configurações, o Render iniciará a implantação.
-    - JQuando finalizado, será fornecida uma URL pública para acessar a aplicação.
+    - Quando finalizado, será fornecida uma URL pública para acessar a aplicação.
       
 
 ---

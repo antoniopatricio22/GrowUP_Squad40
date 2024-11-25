@@ -1,15 +1,13 @@
 FROM maven:3.9.8-eclipse-temurin-21 AS build
-#COPY compesa/src /app/src
-#COPY compesa/pom.xml /app
-COPY compesa /app
-
 WORKDIR /app
+COPY compesa /app
 RUN mvn clean install -U
 
 FROM openjdk:21
+WORKDIR /app
+COPY --from=build /app/database /app/database
 COPY --from=build /app/target/compesa-0.0.1-SNAPSHOT.jar /app/app.jar
 
-WORKDIR /app
 EXPOSE 8080
 
 # Run the application
