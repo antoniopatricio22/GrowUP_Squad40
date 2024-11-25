@@ -36,7 +36,7 @@ Mentores:
 - Flavio Fernandes
 
 
-Recife, Outubro de 2024.
+Recife, Novembro de 2024.
 
 ---
 
@@ -54,8 +54,6 @@ Recife, Outubro de 2024.
 - **Java-Dotenv** para configuração via variáveis de ambiente
 
 
----
-
 ## Pré-requisitos
 
 1. **Java JDK 21** ou superior
@@ -63,7 +61,7 @@ Recife, Outubro de 2024.
 3. Um editor de texto ou IDE (ex.: IntelliJ IDEA, VSCode, Eclipse)
 4. Banco de dados (SQLite incluído; para MySQL, é necessário instalá-lo e configurá-lo)
 
----
+
 ## Configuração do Ambiente
 
 ### 1. Obtenha o Código Fonte
@@ -99,7 +97,6 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
 ```bash
 CREATE DATABASE compesa;
 ```
----
 
 ## Como Executar
 ### 1. Build e Executar Localmente
@@ -111,7 +108,7 @@ mvn spring-boot:run
 ```
 A aplicação estará disponível em http://localhost:8080.
 
----
+
 ## APIs Disponíveis
 
 - Autenticação
@@ -127,7 +124,7 @@ A aplicação estará disponível em http://localhost:8080.
 
 Mais detalhes podem ser encontrados na Documentação para o Gerenciamento de Usuários.
 
----
+
 
 ## Deploy em Produção
 ### Opção 1: Servidor Local (Tomcat, Nginx, etc.)
