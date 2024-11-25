@@ -10,7 +10,7 @@ target/
 /release.properties
 
 # Environment variables
-*.env
+.env
 
 # Compiled class files
 *.class
